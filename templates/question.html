@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questions</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="question-container">
+        <div class="progress-container">
+            <div class="progress-bar" id="myProgressBar" style="width: progress_percentage; background: linear-gradient(to left, #0056b3, #da710f );">
+                {{ progress_percentage }}%
+            </div>
+        </div>
+        <br>
+    
+        {% if question_id >= 2 %}
+            <h4>Question {{ question_id }}</h4>
+            <h2>What sentiment best describes this text?</h2>
+            <p>{{ question.question_text }}</p>
+        
+        
+            <form method="POST" action="{{ url_for('save_response', question_id=question.id) }}">
+                <h3>{{ question.text }}</h3>
+                <!-- <div id="divider"></div> -->
+                <div class="question-subsection" id="subsection-1">
+                <label class="emoji-option" onclick="toggleEmoji(this)">
+                    <input type="radio" name="response_text" value="Positive" onclick="nextSubsection()"> 
+                    🙂 Positive
+                </label><br>
+                <label class="emoji-option" onclick="toggleEmoji(this)">
+                    <input type="radio" name="response_text" value="Negative" onclick="nextSubsection()"> 
+                    😠 Negative
+                </label><br>
+                <label class="emoji-option" onclick="toggleEmoji(this)">
+                    <input type="radio" name="response_text" value="Neutral" onclick="nextSubsection()"> 
+                    😐 Neutral
+                </label><br><br>
+                 
+            </div>
+            
+            <div id="divider"></div>
+            <div class="question-subsection" id="subsection-2" style="display: none;">
+                
+                <br>
+                <h3>Is this the way you would say this sentence in {{location}}? </h3>
+                <br>
+                <div class = "dialect-options">
+                    <label onclick="showControls()"> <input type="radio" name="dialect" value="Yes"> Yes
+                    </label>
+                    <label ><input type="radio" name="dialect" value="No" onclick="showSubsection3()"> No
+                    </label>
+                </div>
+
+            </div>
+            <div id="divider"></div>
+            <div class="question-subsection" id="subsection-3" style="display: none;">
+                <!-- <div id="divider"></div> -->
+                <br>
+                <h2><label for="freeform"> Rewrite the sentence to fit your style of speaking</label></h2><br>
+                <textarea id="freeform" name="alternative_text" rows="2" cols="70"> Enter text here...</textarea>
+            </div>
+            <br>
+            
+            <div class="controls" id="controls" style= "display: none;">
+                <!-- Conditional Next and Back Buttons -->
+                {% if previous_question_id %}
+                    <a href="{{ url_for('fetch_question', question_id=previous_question_id) }}">Back</a>
+                {% endif %}
+                
+                {% if next_question_id %}
+             <!-- <a href="{{ url_for('fetch_question', question_id=next_question_id) }}">Next</a> -->
+                    <input type="submit" value="Next">
+
+                {% else %}
+                <!-- This is the last question, show the "Submit" button -->
+                    <input type="submit" value="Submit">
+        
+        {% endif %}
+            </div>
+        </form>
+        <script>
+            // Get the progress percentage from Flask and update the progress bar width
+            const progressPercentage = {{ progress_percentage }};
+            const progressBar = document.getElementById("myProgressBar");
+            progressBar.style.width = progressPercentage + "%";
+        
+            function toggleEmoji(label) {
+                const input = label.querySelector('input[type="radio"]');
+                if (!input.checked) {
+                    // Uncheck all radio buttons with the same name
+                    const radioButtons = document.querySelectorAll(`input[name="${input.name}"]`);
+                    radioButtons.forEach(btn => {
+                        btn.checked = false;
+                        btn.parentNode.classList.remove('checked');
+                    });
+        
+                    // Check the clicked radio button and apply the checked color to the emoji
+                    input.checked = true;
+                    label.classList.add('checked');
+        
+                }
+            }
+            
+            function nextSubsection() {
+                if (document.getElementById('subsection-1')) {
+                    if (document.getElementById('subsection-1').style.display == 'none'){
+                        document.getElementById('subsection-1').style.display = 'block';
+                        document.getElementById('subsection-2').style.display = 'none';
+                    }
+                    else{
+                        document.getElementById('subsection-1').style.display = 'none';
+                        document.getElementById('subsection-2').style.display = 'block';
+                    }
+                    }
+            }
+              
+            
+
+            function showSubsection3() {
+                
+                if (document.getElementById('subsection-2')) {
+                    if (document.getElementById('subsection-2').style.display == 'none'){
+                        document.getElementById('subsection-2').style.display = 'block';
+                        document.getElementById('subsection-3').style.display = 'none';
+                        document.getElementById('controls').style.display = 'none';
+                    }
+                    else{
+                        document.getElementById('subsection-2').style.display = 'none';
+                        document.getElementById('subsection-3').style.display = 'block';
+                        document.getElementById('controls').style.display = 'block';
+                    }
+              }
+              showControls();
+            }
+            
+            function showControls(){
+                const controlsDiv = document.getElementById('controls');
+                controlsDiv.style.display = 'block';
+                
+            }
+
+
+
+
+                
+            
+                // If it's the last question, show the "Submit" button
+                // if (!{{ next_question_id }}) {
+                //     document.querySelector('.controls input[type="submit"]').style.display = 'inline-block';
+                // }
+    </script>
+    {% endif %}
+    <div class="controls-logout">
+    <form method="POST" action="{{ url_for('logout') }}">
+        <button type="submit" class="logout-button">Log Out</button>
+    </form>
+</div>
+</div>
+</body>
+</html>

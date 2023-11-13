@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questions</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='thanks.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="wrapper" class="animated zoomIn">
+        <h1>
+            <underline>Thank you!</underline>
+        </h1>
+        <h3>For Participating in this survey. Your valuable insights and contributions are extremely useful in advancing our research.</h3>
+    </div>
+    <script>
+        $( document ).ready(function() {
+  
+            $("h1").hover(function() { 
+                // when user is hovering the h1
+                $( this ).addClass("animated infinite pulse"); 
+                // we add pulse animation and to infinite
+            }, function() {
+                // when user no longer hover on the h1
+                $( this ).removeClass("animated infinite pulse");
+                // we remove the pulse
+            });
+        });
+
+    </script>
+</body>
