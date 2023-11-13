@@ -298,9 +298,13 @@ def register():
         password = form.password.data
         user = User(username=username, email=email, password=password)
         db.session.add(user)
-        db.session.commit()
-        flash('Registration successful. You can now log in.', 'success')
-        return redirect(url_for('login'))
+        try:
+            db.session.commit()
+            flash('Registration successful. You can now log in.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(e)
+            return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 
