@@ -1,0 +1,99 @@
+body{
+    background: #bae8e8;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.ptr{
+    width: 100%;
+    height: auto;
+    margin-top: 150px;
+}
+.container{
+    width: 973px;
+    height: 568px;
+    background: white;
+    border-radius: 20px;
+    margin: 0 auto;
+}
+
+.container .inclusive{
+    width: 853px;
+    height: 447px;
+    position: absolute;
+
+    margin: 60px;
+}
+.head{
+    width: auto;
+    margin-bottom: 20px;
+}
+.head h1{
+    font-size: 30px;
+    font-weight: bold;
+    font-family: Segoe UI;
+}
+
+.text{
+    margin-bottom: 48px;
+}
+.text p {
+    font-size: 20px;
+    font-family: Segoe UI;
+}
+
+.container .item-container{
+    width: 860;
+    height: 286px;
+    margin: 0 auto;
+
+    display: flex;
+    gap: 20px;
+    row-gap: 9px;
+    flex-wrap: wrap;
+}
+
+.item-container .item-box{
+    width: 412px;
+    height: 130px;
+
+    border-radius: 7px;
+    border: 2px solid rgb(219, 219, 219);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    box-shadow: 2px 2px 7px #dadada;
+}
+
+.item-box .item-box-ctn{
+    width: 325px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+}
+
+.item-box-ctn .image-wrapper{
+    width: 75px;
+    height: 75px;
+}
+
+.image-wrapper img{
+    width: 75px;
+    height: 75px;
+}
+
+.item-box-texts{
+    margin-left:auto ;
+}
+
+.item-box-texts .item-box-head h3{
+    font-size: 20px;
+    font-family: Segoe UI;
+}
+.item-box-texts .item-box-p{
+    font-size: 18px;
+    font-family: Segoe UI;
+}
