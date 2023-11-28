@@ -14,7 +14,7 @@ import math
 application = Flask(__name__)
 
 # Configure the secret key
-application.secret_key = '497021'
+application.secret_key = 'ebd7979e922e558d1d34a7ec75caab1ef94faef6'
 application.config['SESSION_TYPE'] = 'filesystem'
 Session(application)
 # Configure the database connection
