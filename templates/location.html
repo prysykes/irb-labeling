@@ -7,12 +7,30 @@
     <h1>Do you consider yourself from any of these locations?</h1>
     <form method="POST" action=''>
         <label for="location">Select your city of origin:</label>
-        <select id="location" name="location">
-            <option value="baltimore">Baltimore</option>
-            <option value="new_york">New York</option>
-            
+        <select id="location" name="location" onchange="checkOther(this)">
+            <option value="Baltimore">Baltimore</option>
+            <option value="New York">New York</option>
+            <option value="other">Other</option>
         </select>
+        <div id="otherLocation" style="display:none;">
+            <label for="other">Enter your place of origin:</label>
+            <input type="text" id="otherInput" name="other" placeholder="Type your location">
+        </div>
         <input type="submit" value="Next">
     </form>
+    <script>
+        function checkOther(select) {
+            var otherLocationDiv = document.getElementById("otherLocation");
+            var otherInput = document.getElementById("otherInput");
+
+            if (select.value === "other") {
+                otherLocationDiv.style.display = "block";
+                otherInput.required = true;
+            } else {
+                otherLocationDiv.style.display = "none";
+                otherInput.required = false;
+            }
+        }
+    </script>
 </body>
 </html>

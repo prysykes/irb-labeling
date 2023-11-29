@@ -1,3 +1,5 @@
+import sys
+print(sys.path)
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from models import LoginForm, db, Question, Response, User, RegistrationForm, LoginForm  # Import your models from models.py
 # from flask_sqlalchemy import SQLAlchemy
@@ -273,13 +275,17 @@ def location():
 
         if request.method == 'POST':
             selected_location = request.form.get('location')
+            other_location = request.form.get('other_location', '')
+
+            # Use the selected location or other_location based on the user's choice
+            final_location = other_location if selected_location == 'other' else selected_location
 
             # Save the location to the current user
-            current_user.location = selected_location
+            current_user.location = final_location
             db.session.commit()
 
             # Store the location in the session
-            session['user_location'] = selected_location
+            session['user_location'] = final_location
 
             # Redirect to the survey's first question
             return redirect(url_for('fetch_question', question_id=2))
@@ -307,6 +313,30 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+@application.route('/update_location', methods=['GET', 'POST'])
+@login_required
+def update_location():
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            selected_location = request.form.get('location')
+            other_location = request.form.get('other_location', '')  # Default to empty string if not present
+
+            # Use the selected location or other_location based on the user's choice
+            final_location = other_location if selected_location == 'other' else selected_location
+
+            # Update the location for the current user
+            current_user.location = final_location
+            db.session.commit()
+
+            # Store the updated location in the session
+            session['user_location'] = final_location
+
+            # Redirect to a page indicating that the location has been updated
+            return render_template('location_updated.html', new_location=final_location)
+
+        return render_template('update_location.html', current_location=current_user.location)
+
+    return "You must be logged in to access this page.", 401
 
 
 

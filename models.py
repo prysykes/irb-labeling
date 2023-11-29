@@ -1,13 +1,12 @@
 from datetime import datetime
-# from tkinter.tix import INTEGER
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-# from passlib.hash import scrypt
 from werkzeug.security import check_password_hash
+
 
 db = SQLAlchemy()
 

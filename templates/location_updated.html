@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey App - Location Updated</title>
+</head>
+<body>
+    <h1>Location Updated</h1>
+    <p>Your location has been updated to: <strong>{{ new_location }}</strong></p>
+    <p><a href="{{ url_for('fetch_question', question_id=current_user.survey_progress) }}">Continue to the survey</a></p>
+
+</body>
+</html>
