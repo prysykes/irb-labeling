@@ -21,7 +21,7 @@ def send_completion_reminder(email, progress_percentage, week, username,copy_rec
     body = f'''
         <p><b>Dear {username},</b></p>
         <p>We hope this email finds you well. Thank you once again for signing up to participate in this survey. Your insights are incredibly valuable to us. This is a friendly reminder to complete the survey. You have completed <b>{progress_percentage}%</b> of the survey for <b>WEEK {week}</b>.</p>
-        <p>If you encounter any issues or have any questions, feel free to reach out to <a href="mailto:cynos1@morgan.edu">cynos1@morgan.edu</a>. Thank you once again for being a crucial part of this research!</p>
+        <p>If you encounter any issues or have any questions, feel free to reach out to <a href="mailto:cynos1@morgan.edu">cynos1@morgan.edu</a>. Thank you once again for being a crucial part of this research! <br><a href = "https://www.morgan.edu/ceamls/research/labs/data-engineering-and-predictive-analytics-(depa)-lab">DEPA</a> Lab appreciates you!</p>
     '''
     
     

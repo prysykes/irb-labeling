@@ -13,20 +13,13 @@
     <input class="menu-btn" type="checkbox" id="menu-btn" />
     <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
     
+    <img src="{{url_for('static', filename='DEPA.svg')}}" alt="my logo" class="logo">
     <div class="button-container">
             <a href="{{ url_for('login') }}" class="login-button">Login</a>
             <a href="{{ url_for('register') }}" class="register-button">Sign up</a>
     </div>
 </header>
-
-<!-- <div class="logo-container">
-    <a href="/">
-        <img src="{{ url_for('static', filename='depa_banner1.jpg') }}" alt="Logo" class="logo">
-    </a>
-</div> -->
-   <!-- <br>
-   <br>
-   <br> -->
+   
     <div class="container">
         <div class="inclusive">
             <div class="head">
