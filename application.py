@@ -397,7 +397,7 @@ def calculate_week(user_registration_date):
 
 @application.route('/test_email')  
 def test_email():
-    send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1)
+    send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1, "cynos1")
     return 'Test email sent'
 
 if __name__ == '__main__':
