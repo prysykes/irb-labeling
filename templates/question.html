@@ -6,6 +6,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap" rel="stylesheet">
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('update_location') }}">Edit Location</a></li>
+        </ul>
+    </nav>
+    <br>
+    <br>    
     <div class="question-container">
         <div class="progress-container">
             <div class="progress-bar" id="myProgressBar" style="width: progress_percentage; background: linear-gradient(to left, #0056b3, #da710f );">
@@ -35,8 +42,11 @@
                 <label class="emoji-option" onclick="toggleEmoji(this)">
                     <input type="radio" name="response_text" value="Neutral" onclick="nextSubsection()"> 
                     😐 Neutral
+                </label><br>
+                <label class="emoji-option" onclick="toggleEmoji(this)">
+                    <input type="radio" name="response_text" value="N/A" onclick="nextSubsection()"> 
+                    🤔 I do not Know
                 </label><br><br>
-                 
             </div>
             
             <div id="divider"></div>
@@ -152,10 +162,10 @@
     </script>
     {% endif %}
     <div class="controls-logout">
-    <form method="POST" action="{{ url_for('logout') }}">
-        <button type="submit" class="logout-button">Log Out</button>
-    </form>
-</div>
+        <form method="POST" action="{{ url_for('logout') }}">
+            <button type="submit" class="logout-button">Log Out</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>

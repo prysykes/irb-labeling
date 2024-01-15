@@ -1,13 +1,12 @@
 from datetime import datetime
-# from tkinter.tix import INTEGER
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-# from passlib.hash import scrypt
-from werkzeug.security import check_password_hash
+
+
 
 db = SQLAlchemy()
 
@@ -58,7 +57,8 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     location = db.Column(db.String(255))
     survey_progress = db.Column(db.Integer, default = 2)
-    
+    completed_survey = db.Column(db.Boolean, default=False)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow)  
 
     def __init__(self, username, email, password):
         self.username = username
