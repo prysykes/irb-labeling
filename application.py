@@ -1,30 +1,22 @@
-import sys, os
-from wsgiref.util import application_uri
-print(sys.path)
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from config import Config, TestingConfig
-from models import LoginForm, db, Question, Response, User, RegistrationForm, LoginForm  
+from models import LoginForm, db, Question, Response, User, RegistrationForm, LoginForm  # Import your models from models.py
+# from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import Session
+# from flask_wtf import FlaskForm
 from flask_migrate import Migrate
+# from passlib.hash import scrypt
 from werkzeug.security import check_password_hash
 import math
-from datetime import datetime, timedelta
-from flask_mail import Mail
-from email_utils import send_completion_reminder
 
-
+# from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 application = Flask(__name__)
 
-application.config.from_object(Config)
-
-mail = Mail(application)
-
+# Configure the secret key
 application.secret_key = 'ebd7979e922e558d1d34a7ec75caab1ef94faef6'
 application.config['SESSION_TYPE'] = 'filesystem'
 Session(application)
-
 # Configure the database connection
 application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///depa.db'
 db.init_app(application)
@@ -42,6 +34,10 @@ with application.app_context():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# def is_last_question(question_id):
+#     current_question = db.session.get(Question, question_id)
+#     last_question = db.session.query(Question).order_by(Question.id.desc()).first()
+#     return current_question == last_question
 
 def is_last_question(question_id):
     current_question = db.session.query(Question).filter_by(id=question_id).first()
@@ -55,8 +51,6 @@ def get_next_question_id(question_id):
         next_question = db.session.query(Question).filter(Question.id > question_id).order_by(Question.id).first()
         return next_question.id if next_question else None
     return None
-
-
 
 
 # Define routes and views
@@ -126,7 +120,7 @@ def fetch_question(question_id):
 
         # Calculate the progress percentage
         progress_percentage = math.ceil((question_id - 2) / (total_questions - 2) * 100)
-
+# is_last_question = is_last_question(next_question_id) if next_question_id else True
 
         return render_template('question.html', 
         question_id=question_id, 
@@ -138,7 +132,6 @@ def fetch_question(question_id):
         location = location)
     
     return "You must be logged in to access this page.", 401
-
 def is_subsection_2_answered(user_id, question_id):
     # Query the database to check if the user has answered subsection-2 with "Yes"
     response = Response.query.filter_by(user_id=user_id, question_id=question_id).first()
@@ -197,6 +190,13 @@ def save_response(question_id):
 
     # Fetch the location from the session
     location = session.get('user_location', None)
+
+    # print(f"Received question_id: {question_id}")
+    # print(f"Received response_text: {response_text}")
+    # print(f"Current user ID: {user_id}")
+    # print(f"Dialect?: {dialect}")
+    # print(f"Alternative text: {alternative_text}")
+    # print(f"Location: {location}")
 
     save_response_to_database(question_id, user_id, response_text, dialect, alternative_text, location)
     # Update the user's survey progress immediately
@@ -273,17 +273,13 @@ def location():
 
         if request.method == 'POST':
             selected_location = request.form.get('location')
-            other_location = request.form.get('other_location', '')
-
-            # Use the selected location or other_location based on the user's choice
-            final_location = other_location if selected_location == 'other' else selected_location
 
             # Save the location to the current user
-            current_user.location = final_location
+            current_user.location = selected_location
             db.session.commit()
 
             # Store the location in the session
-            session['user_location'] = final_location
+            session['user_location'] = selected_location
 
             # Redirect to the survey's first question
             return redirect(url_for('fetch_question', question_id=2))
@@ -311,94 +307,8 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-@application.route('/update_location', methods=['GET', 'POST'])
-@login_required
-def update_location():
-    if current_user.is_authenticated:
-        if request.method == 'POST':
-            selected_location = request.form.get('location')
-            other_location = request.form.get('other_location', '')  # Default to empty string if not present
-
-            # Use the selected location or other_location based on the user's choice
-            final_location = other_location if selected_location == 'other' else selected_location
-
-            # Update the location for the current user
-            current_user.location = final_location
-            db.session.commit()
-
-            # Store the updated location in the session
-            session['user_location'] = final_location
-
-            # Redirect to a page indicating that the location has been updated
-            return render_template('location_updated.html', new_location=final_location)
-
-        return render_template('update_location.html', current_location=current_user.location)
-
-    return "You must be logged in to access this page.", 401
-
-@application.route('/track_completion', methods = ['GET'])
-@login_required
-def track_completion():
-    user_id = current_user.id
-
-    # get the user's progress from the database
-    user_progress = current_user.survey_progress or 2
-
-    # check if the user has completed the survey
-    if is_last_question(user_progress):
-        # update the completion status in the database
-        current_user.completed_survey = True
-        db.session.commit()
-
-        #Redirect the user to the thank you page
-        return redirect(url_for('thank_you'))
-    # if the user hasn't completed the survey, send a reminder
-    send_completion_reminder(current_user.email)
-    
-    return redirect(url_for('fetch_question', question_id= current_user.survey_progress))
-
-def send_completion_reminders():
-    users = User.query.all()
-
-    for user in users:
-        if user.survey_progress:
-            progress_percentage = calculate_progress_percentage(user.survey_progress)
-            week = calculate_week(user.registration_date)
-
-            if week == 1 and progress_percentage < 50:
-                send_completion_reminder(user.email, progress_percentage, week)
-            elif week == 2 and progress_percentage < 75:
-                send_completion_reminder(user.email, progress_percentage, week)
-            elif week == 2:
-                # Send final reminder for Week 2
-                send_completion_reminder(user.email, progress_percentage, week)
-    
-    
-
-def calculate_progress_percentage(survey_progress):
-    total_questions = Question.query.count()
-    return int((survey_progress / total_questions) * 100)
 
 
-def calculate_week(user_registration_date):
-    current_date = datetime.utcnow()
-
-    # Calculate the difference in days between the current date and user registration date
-    days_since_registration = (current_date - user_registration_date).days
-    
-    # Determine the week based on the number of days since registration
-    if days_since_registration < 7:
-        return 1
-    elif days_since_registration < 14:
-        return 2
-    else:
-        return None  # Beyond Week 2, maybe a call for last chance
-
-
-@application.route('/test_email')  
-def test_email():
-    send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1)
-    return 'Test email sent'
 
 if __name__ == '__main__':
-    application.run(debug=True, use_reloader = True)
+    application.run(debug=True)
