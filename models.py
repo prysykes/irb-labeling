@@ -58,6 +58,8 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     location = db.Column(db.String(255))
     survey_progress = db.Column(db.Integer, default = 2)
+    completed_survey = db.Column(db.Boolean, default=False)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow)  
     
 
     def __init__(self, username, email, password):

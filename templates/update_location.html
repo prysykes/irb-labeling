@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Survey App - Location</title>
+    <title>Survey App - Update Location</title>
 </head>
 <body>
-    <h1>Do you consider yourself from any of these locations?</h1>
+    <h1>Update Your Location</h1>
     <form method="POST" action=''>
         <label for="location">Select your city of origin:</label>
         <select id="location" name="location" onchange="checkOther(this)">
-            <option value="Baltimore">Baltimore</option>
-            <option value="New York">New York</option>
-            <option value="other">Other</option>
+            <option value="Baltimore" {% if current_location == 'Baltimore' %}selected{% endif %}>Baltimore</option>
+            <option value="New York" {% if current_location == 'New York' %}selected{% endif %}>New York</option>
+            <option value="other" {% if current_location not in ['Baltimore', 'New York'] %}selected{% endif %}>Other</option>
         </select>
         <div id="otherLocation" style="display:none;">
             <label for="other">Enter your place of origin:</label>
-            <input type="text" id="otherInput" name="other" placeholder="Type your location">
+            <input type="text" id="other" name="other_location" value="{{ current_location }}" placeholder="Type your location">
         </div>
-        <input type="submit" value="Next">
+        <input type="submit" value="Update Location">
     </form>
     <script>
         function checkOther(select) {
+            console.log("Function called");
+            console.log("Selected value:", select.value);
             var otherLocationDiv = document.getElementById("otherLocation");
-            var otherInput = document.getElementById("otherInput");
+            var otherInput = document.getElementById("other");
 
             if (select.value === "other") {
                 otherLocationDiv.style.display = "block";
@@ -29,6 +31,7 @@
             } else {
                 otherLocationDiv.style.display = "none";
                 otherInput.required = false;
+                otherInput.value = "";
             }
         }
     </script>

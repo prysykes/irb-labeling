@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_new.css') }}">
+    
 </head>
 <body>
-    <div class="banner">
-        <img src="{{ url_for('static', filename='depa_banner1.jpg') }}" alt="Logo" class="logo">
-    </div>
-<div class="ptr">
+   
+<header class="header">
+    <input class="menu-btn" type="checkbox" id="menu-btn" />
+    <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
     
+    <img src="{{url_for('static', filename='DEPA.svg')}}" alt="my logo" class="logo">
+    <div class="button-container">
+            <a href="{{ url_for('login') }}" class="login-button">Login</a>
+            <a href="{{ url_for('register') }}" class="register-button">Sign up</a>
+    </div>
+</header>
+   
     <div class="container">
         <div class="inclusive">
-            <div class="button-container">
-                <a href="{{ url_for('login') }}" class="login-button">Login</a>
-                <a href="{{ url_for('register') }}" class="register-button">First time here</a>
-            </div>
             <div class="head">
-                <h1>Welcome to "Detecting Bias in African American lexicon: Accessing Language Model Disparities" Research project</h1>
+                <h1>Welcome to "Accessing Linguistic Bias in Sentiment Analysis by Large Language Models Across African-American Speech Communities" Research project</h1>
             </div>
             <div class="text">
             </div>
@@ -35,7 +39,7 @@
                                 <h3>Purpose of Survey</h3>
                             </div>
                             <div class="item-box-p">
-                                This survey aims to collect accurate text data representative of African Americans from Baltimore and/or New York 
+                                This survey aims to collect accurate text data representative of African Americans
                                 while investigating the presence of bias within the lexicon of African American English and understanding how words 
                                 and phrases are associated with different sentiments.
                             </div>
@@ -43,22 +47,22 @@
                     </div>
                 </div>
 
-                <div class="item-box">
+                <!-- <div class="item-box">
                     <div class="item-box-ctn">
                         <div class="image-wrapper">
-                            <!-- <img src="https://cdn-icons-png.flaticon.com/512/1527/1527553.png" alt=""> -->
+                            <img src="https://cdn-icons-png.flaticon.com/512/1527/1527553.png" alt="">
                             <img width="94" height="94" src="https://img.icons8.com/3d-fluency/94/user-female--v2.png" alt="user-female--v2"/>
                         </div>
-                        <div class="item-box-texts">
+                         <div class="item-box-texts">
                             <div class="item-box-head">
                                 <h3>Anonymity and Confidentiality</h3>
                             </div>
                             <div class="item-box-p">
                                 Rest assured that your responses are completely anonymous. We will not collect any personally identifiable information, and your participation will remain confidential.
                             </div>
-                        </div>
+                        </div> 
                     </div>
-                </div>
+                </div> -->
 
                 <div class="item-box">
                     <div class="item-box-ctn">
@@ -131,6 +135,8 @@
             </div>
         </div>
     </div>
-</div>
+
+
+
 </body>
 </html>
