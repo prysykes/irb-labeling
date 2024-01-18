@@ -9,12 +9,14 @@ from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 from datetime import datetime
 import math
+from flask_mail import Mail
 from email_utils import send_completion_reminder
 
 # from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 application = Flask(__name__)
 
+mail = Mail(application)
 # Configure the secret key
 application.secret_key = '497021'
 application.config['SESSION_TYPE'] = 'filesystem'
