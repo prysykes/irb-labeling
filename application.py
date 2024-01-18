@@ -9,14 +9,14 @@ from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 from datetime import datetime
 import math
-from flask_mail import Mail
-from email_utils import send_completion_reminder
+# from flask_mail import Mail
+# from email_utils import send_completion_reminder
 
 # from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 application = Flask(__name__)
 
-mail = Mail(application)
+# mail = Mail(application)
 # Configure the secret key
 application.secret_key = '497021'
 application.config['SESSION_TYPE'] = 'filesystem'
@@ -350,25 +350,25 @@ def track_completion():
         #Redirect the user to the thank you page
         return redirect(url_for('thank_you'))
     # if the user hasn't completed the survey, send a reminder
-    send_completion_reminder(current_user.email)
+    # send_completion_reminder(current_user.email)
     
     return redirect(url_for('fetch_question', question_id= current_user.survey_progress))
 
-def send_completion_reminders():
-    users = User.query.all()
+# def send_completion_reminders():
+#     users = User.query.all()
 
-    for user in users:
-        if user.survey_progress:
-            progress_percentage = calculate_progress_percentage(user.survey_progress)
-            week = calculate_week(user.registration_date)
+#     for user in users:
+#         if user.survey_progress:
+#             progress_percentage = calculate_progress_percentage(user.survey_progress)
+#             week = calculate_week(user.registration_date)
 
-            if week == 1 and progress_percentage < 50:
-                send_completion_reminder(user.email, progress_percentage, week)
-            elif week == 2 and progress_percentage < 75:
-                send_completion_reminder(user.email, progress_percentage, week)
-            elif week == 2:
-                # Send final reminder for Week 2
-                send_completion_reminder(user.email, progress_percentage, week)
+#             if week == 1 and progress_percentage < 50:
+#                 send_completion_reminder(user.email, progress_percentage, week)
+#             elif week == 2 and progress_percentage < 75:
+#                 send_completion_reminder(user.email, progress_percentage, week)
+#             elif week == 2:
+#                 # Send final reminder for Week 2
+#                 send_completion_reminder(user.email, progress_percentage, week)
     
     
 
@@ -392,10 +392,10 @@ def calculate_week(user_registration_date):
         return None  # Beyond Week 2, maybe a call for last chance
 
 
-@application.route('/test_email')  
-def test_email():
-    send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1, "cynos1")
-    return 'Test email sent'
+# @application.route('/test_email')  
+# def test_email():
+#     send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1, "cynos1")
+#     return 'Test email sent'
 
 
 if __name__ == '__main__':
