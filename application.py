@@ -1,26 +1,30 @@
+import sys
+from wsgiref.util import application_uri
+print(sys.path)
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from models import LoginForm, db, Question, Response, User, RegistrationForm, LoginForm  # Import your models from models.py
-# from flask_sqlalchemy import SQLAlchemy
+from config import Config
+from models import LoginForm, db, Question, Response, User, RegistrationForm, LoginForm  
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import Session
-# from flask_wtf import FlaskForm
 from flask_migrate import Migrate
-# from passlib.hash import scrypt
 from werkzeug.security import check_password_hash
-from datetime import datetime
 import math
+from datetime import datetime
 from flask_mail import Mail
 from email_utils import send_completion_reminder
 
-# from wtforms.validators import DataRequired, Email, EqualTo, Length
+
 
 application = Flask(__name__)
 
+application.config.from_object(Config)
+
 mail = Mail(application)
-# Configure the secret key
-application.secret_key = '497021'
+
+application.secret_key = 'ebd7979e922e558d1d34a7ec75caab1ef94faef6'
 application.config['SESSION_TYPE'] = 'filesystem'
 Session(application)
+
 # Configure the database connection
 application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///depa.db'
 db.init_app(application)
@@ -38,10 +42,6 @@ with application.app_context():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# def is_last_question(question_id):
-#     current_question = db.session.get(Question, question_id)
-#     last_question = db.session.query(Question).order_by(Question.id.desc()).first()
-#     return current_question == last_question
 
 def is_last_question(question_id):
     current_question = db.session.query(Question).filter_by(id=question_id).first()
@@ -55,6 +55,8 @@ def get_next_question_id(question_id):
         next_question = db.session.query(Question).filter(Question.id > question_id).order_by(Question.id).first()
         return next_question.id if next_question else None
     return None
+
+
 
 
 # Define routes and views
@@ -124,7 +126,7 @@ def fetch_question(question_id):
 
         # Calculate the progress percentage
         progress_percentage = math.ceil((question_id - 2) / (total_questions - 2) * 100)
-# is_last_question = is_last_question(next_question_id) if next_question_id else True
+
 
         return render_template('question.html', 
         question_id=question_id, 
@@ -136,6 +138,7 @@ def fetch_question(question_id):
         location = location)
     
     return "You must be logged in to access this page.", 401
+
 def is_subsection_2_answered(user_id, question_id):
     # Query the database to check if the user has answered subsection-2 with "Yes"
     response = Response.query.filter_by(user_id=user_id, question_id=question_id).first()
@@ -272,7 +275,7 @@ def location():
             selected_location = request.form.get('location')
             other_location = request.form.get('other_location', '')
 
-            # Use the selected location or other location based on the user's choice
+            # Use the selected location or other_location based on the user's choice
             final_location = other_location if selected_location == 'other' else selected_location
 
             # Save the location to the current user
@@ -397,6 +400,5 @@ def test_email():
     send_completion_reminder('cynthiasamuels98@gmail.com', 30, 1, "cynos1")
     return 'Test email sent'
 
-
 if __name__ == '__main__':
-    application.run(debug=True)
+    application.run(debug=True, use_reloader = True)
