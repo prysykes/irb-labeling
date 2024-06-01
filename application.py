@@ -36,7 +36,7 @@ application.config.from_object(Config)
 
 mail = Mail(application)
 
-application.secret_key = "ebd7979e922e558d1d34a7ec75caab1ef94faef6"
+
 application.config["SESSION_TYPE"] = "filesystem"
 Session(application)
 
